@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Annual Quit Rates During The Pandemic</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+</head>
+
+<body>
+  <h2>Annual Quit Rates</h2>
+  <p>Numbers on hover reflect the quit rates in each year and industry.</p>
+  <select id="selDataset" onchange="optionChanged(this.value)"></select>
+      <option value="Construction">Construction</option>
+      <option value="RetailTrade">RetailTrade</option>
+      <option value="Transportation_Warehousing_Utilities">Transportation_Warehousing_Utilities</option>
+      <option value="Arts_Entertainment_Recreation">Arts_Entertainment_Recreation</option>
+      <option value="Accommodation_FoodServices">Accommodation_Food services</option>
+  </select>
+
+  <div id="bubble"></div>
+
+  <p>Data Sources:<br />
+      <ul>
+          <li>
+              <a href="https://www.bls.gov/news.release/jolts.t22.htm">Annual average quits rates by industry and region, not seasonally adjusted</a>
+          </li>
+  
+  </p>
+
+  <!-- <script src="./static/js/plots.js"></script> -->
+  <script src="{{ url_for('static', filename='js/plots.js') }}"></script> 
+
+
+</body>
+</html>
+
