@@ -14,15 +14,15 @@
 <body>
   <h2>Annual Quit Rates</h2>
   <p>Numbers on hover reflect the quit rates in each year and industry.</p>
-  <select id="selDataset" onchange="optionChanged(this.value)"></select>
+  <select id="selDataset">
+      <option value="Accommodation and food services">Accommodation and food services</option>
+      <option value="Arts, entertainment, and recreation">Arts, entertainment, and recreation</option>
       <option value="Construction">Construction</option>
-      <option value="RetailTrade">RetailTrade</option>
-      <option value="Transportation_Warehousing_Utilities">Transportation_Warehousing_Utilities</option>
-      <option value="Arts_Entertainment_Recreation">Arts_Entertainment_Recreation</option>
-      <option value="Accommodation_FoodServices">Accommodation_Food services</option>
+      <option value="Retail trade">Retail trade</option>
+      <option value="Transportation, warehousing, and utilities">Transportation, warehousing, and utilities</option>
   </select>
 
-  <div id="bubble"></div>
+  <div id="plot"></div>
 
   <p>Data Sources:<br />
       <ul>

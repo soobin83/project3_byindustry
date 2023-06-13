@@ -4,7 +4,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-import datetime as dt
+import pandas as pd
 
 from flask import Flask, jsonify, render_template
 
@@ -44,29 +44,29 @@ def home():
     """
     return render_template('index.html')
 
-@app.route("/api/v1.0/industry_covid19")
-def industry_covid19():
-    # Create our session (link) from Python to the DB
-    session = Session(engine)
-    """Return a list of all industry names"""
-    # Query all
-    results = session.query(top5industryannualquitrates.Industry).all()
-    session.close()
-    # Convert list of tuples into normal list
-    all_industry = list(np.ravel(results))
-    return jsonify(all_industry)
-
 @app.route("/api/v1.0/quitrates_covid19_byindustry")
 def quitrates_covid19_byindustry():
     # Create our session (link) from Python to the DB
     session = Session(engine)
     """Return a list of quitrates in 2018-2022 by industry"""
     # Query all 
-    results2 = session.query(top5industryannualquitrates.Industry, top5industryannualquitrates.column_2018, top5industryannualquitrates.column_2019, top5industryannualquitrates.column_2020, top5industryannualquitrates.column_2021, top5industryannualquitrates.column_2022).all()
+    results = session.query(top5industryannualquitrates.Industry, top5industryannualquitrates.column_2018, top5industryannualquitrates.column_2019, top5industryannualquitrates.column_2020, top5industryannualquitrates.column_2021, top5industryannualquitrates.column_2022).all()
     session.close()
+
+    # Create a dictionary from the row data and append to a list of all_rates
+    df = pd.DataFrame(results)
+    industry_names = list(df["Industry"])
+    categories_and_values = {}
+    for rname in industry_names:
+        rates_series = df.loc[df["Industry"]==rname].iloc[:,1:]
+        rates_values = list(rates_series.values[0])
+        rates_years = list(range(2018,2022))
+        categories_and_values[rname] = {"Rates":rates_values, "Years": rates_years}
+    print(categories_and_values)
+
     # Create a dictionary from the row data and append to a list of all_rates
     all_quitrates = []
-    for Industry, column_2018, column_2019, column_2020, column_2021, column_2022 in results2:
+    for Industry, column_2018, column_2019, column_2020, column_2021, column_2022 in results:
         quitrates_covid19_dict = {}
         quitrates_covid19_dict["Industry"] = Industry
         quitrates_covid19_dict["2018"] = column_2018
@@ -76,8 +76,8 @@ def quitrates_covid19_byindustry():
         quitrates_covid19_dict["2022"] = column_2022
         all_quitrates.append(quitrates_covid19_dict)
 
-    return jsonify(all_quitrates)
-
+    # return jsonify(all_quitrates)
+    return categories_and_values
 
 if __name__ == "__main__":
     app.run(debug=True)
